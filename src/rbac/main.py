@@ -3,6 +3,7 @@ import logging
 from fastapi import FastAPI
 
 from rbac.application.account.controller import account_command_controller
+from rbac.application.project.controller import project_command_controller
 from rbac.utils.life import lifespan
 
 
@@ -15,4 +16,5 @@ app = FastAPI(lifespan=lifespan)
 
 
 app.include_router(account_command_controller.router)
+app.include_router(project_command_controller.router)
 

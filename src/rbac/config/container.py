@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from rbac.application.account.port.out.email_serivce_port_stub_impl import EmailServicePortStubImpl
 from rbac.application.account.repository.account_repository_impl import AccountRepositoryImpl
 from rbac.application.common.jwt_token_provider_impl import JwtTokenProviderImpl
+from rbac.application.project.repository.project_member_repository_impl import ProjectMemberRepositoryImpl
+from rbac.application.project.repository.project_repository_impl import ProjectRepositoryImpl
 from rbac.config.db.database import get_db
 from rbac.config.settings import Settings
 from rbac.domain.account.repository.account_repository import AccountRepository
@@ -12,6 +14,10 @@ from rbac.domain.account.service.account_command_usercase import AccountCommandU
 from rbac.domain.account.service.email_verify_service import EmailVerifyInMemoryService
 from rbac.domain.account.service.email_verify_usecase import EmailVerifyUseCase
 from rbac.domain.common.jwt_token_provider import JwtTokenProvider
+from rbac.domain.project.repository.project_member_repository import ProjectMemberRepository
+from rbac.domain.project.repository.project_repository import ProjectRepository
+from rbac.domain.project.service.project_command_service import ProjectCommandService
+from rbac.domain.project.service.project_command_usecase import ProjectCommandUseCase
 
 
 class Container(containers.DeclarativeContainer):
@@ -35,9 +41,17 @@ class Container(containers.DeclarativeContainer):
 
     account_repository: AccountRepository = providers.Factory(AccountRepositoryImpl, db=db)
 
+    project_repository: ProjectRepository = providers.Factory(ProjectRepositoryImpl, db=db)
+    project_member_repository: ProjectMemberRepository = providers.Factory(ProjectMemberRepositoryImpl, db=db)
+
     account_command_usecase: AccountCommandUseCase = providers.Factory(
         AccountCommandService,
         account_repository=account_repository,
         jwt_token_provider=jwt_token_provider
     )
 
+    project_command_usecase: ProjectCommandUseCase = providers.Factory(
+        ProjectCommandService,
+        project_repository=project_repository,
+        project_member_repository=project_member_repository
+    )
