@@ -17,15 +17,15 @@ class AccountCommandUseCase(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def sign_in(self, email: str, tenantKey: str, password: str) -> AccountSignInSuccessResponse:
+    def sign_in(self, email: str, tenant_key: str, password: str) -> AccountSignInSuccessResponse:
         raise NotImplementedError()
 
     @abstractmethod
-    def chang_password(self, user_id: int, newPassword: str):
+    def chang_password(self, user_id: int, new_password: str):
         raise NotImplementedError()
 
     @abstractmethod
-    def delete_account(self, accountId: int):
+    def delete_account(self, account_id: int):
         raise NotImplementedError()
 
     @abstractmethod
