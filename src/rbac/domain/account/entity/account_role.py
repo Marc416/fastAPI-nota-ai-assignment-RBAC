@@ -2,6 +2,8 @@ from __future__ import annotations
 from enum import Enum, auto
 from typing import Set
 
+from fastapi import HTTPException
+
 
 # class AccountRole(Enum):
 #     USER = ("일반 사용자", set())
@@ -30,6 +32,13 @@ class AccountRole(str, Enum):
 
     USER = auto()
     ADMIN = auto()
+
+    @classmethod
+    def from_str(cls, value: str) -> "AccountRole":
+        try:
+            return cls(value)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid role: {value}")
 
 ROLE_DESCRIPTIONS = {
     AccountRole.USER: "일반 사용자",
