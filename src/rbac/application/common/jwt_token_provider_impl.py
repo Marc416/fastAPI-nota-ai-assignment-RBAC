@@ -18,13 +18,14 @@ class JwtTokenProviderImpl(JwtTokenProvider):
         self.algorithm = "HS256"
 
     def parse_authorization_token(self, token: str) -> AccountJwtPayload:
-        return self.__verify_token(token)
+        decoded = self.__verify_token(token)
+        return AccountJwtPayload(**decoded)
 
     def validate_token(self, token: str) -> bool:
         try:
             self.__verify_token(token)
             return True
-        except Exception:
+        except (PyJWTError, ValueError):
             return False
 
     def generate_token(self, payload: Dict[str, Any], ttl: int) -> str:
