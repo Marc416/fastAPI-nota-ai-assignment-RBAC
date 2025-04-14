@@ -1,4 +1,5 @@
 import os
+import logging
 
 from dotenv import load_dotenv
 from fastapi import status
@@ -10,6 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 load_dotenv()
 
 DATABASE_CONN = os.getenv("DATABASE_CONN")
+logger = logging.getLogger(__name__)
 
 engine = create_engine(DATABASE_CONN,  # echo=True,
                        poolclass=QueuePool,
@@ -24,7 +26,7 @@ def direct_get_conn():
         conn = engine.connect()
         return conn
     except SQLAlchemyError as e:
-        print(e)
+        logger.error(f"Database connection error: {e}")
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                             detail="요청하신 서비스가 잠시 내부적으로 문제가 발생하였습니다.")
 
