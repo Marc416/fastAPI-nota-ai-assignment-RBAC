@@ -1,7 +1,9 @@
 from dependency_injector import containers, providers
+from sqlalchemy.orm import Session
 
 from rbac.application.account.repository.account_repository_impl import AccountRepositoryImpl
 from rbac.application.common.jwt_token_provider_impl import JwtTokenProviderImpl
+from rbac.config.db.database import get_db
 from rbac.config.settings import Settings
 from rbac.domain.account.repository.account_repository import AccountRepository
 from rbac.domain.account.service.account_command_service import AccountCommandService
@@ -16,7 +18,9 @@ class Container(containers.DeclarativeContainer):
 
     settings: Settings = providers.Factory(Settings)
 
-    account_repository: AccountRepository = providers.Factory(AccountRepositoryImpl)
+    db: providers.Resource[Session] = providers.Resource(get_db)
+
+    account_repository: AccountRepository = providers.Factory(AccountRepositoryImpl, db=db)
 
     account_command_service: AccountCommandUseCase = providers.Factory(
         AccountCommandService,

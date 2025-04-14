@@ -27,7 +27,3 @@ class AccountCommandUseCase(ABC):
     @abstractmethod
     def delete_account(self, account_id: int):
         raise NotImplementedError()
-
-    @abstractmethod
-    def test(self):
-        raise NotImplementedError()
