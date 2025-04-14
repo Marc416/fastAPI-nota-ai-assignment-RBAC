@@ -29,7 +29,10 @@ class AccountCommandService(AccountCommandUseCase):
                 role: AccountRole) -> AccountSignupSuccessResponse:
         account: Account = Account.create_active_account(email, password, tenant_key, role)
         self.account_repository.save(account)
-        pass
+        return AccountSignupSuccessResponse(
+            id=account.id,
+            created_at=account.created_at
+        )
 
     def sign_in(self, email: str, tenant_key: str, password: str) -> AccountSignInSuccessResponse:
         account: Account = self.account_repository.find_by_email_and_tenant_key(
@@ -49,7 +52,7 @@ class AccountCommandService(AccountCommandUseCase):
         token = self.jwt_token_provider.generate_token(payload=account_payload_map, ttl=60 * 60 * 24 * 7)  # 7일
         return AccountSignInSuccessResponse(token=token)
 
-    def chang_password(self, account_id: int, new_password: str):
+    def change_password(self, account_id: int, new_password: str):
         account: Account = self.account_repository.find_by_account_id(id=account_id)
         account.change_password(new_password=new_password)
         self.account_repository.save(account)

@@ -21,7 +21,7 @@ class AccountCommandUseCase(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def chang_password(self, account_id: int, new_password: str):
+    def change_password(self, account_id: int, new_password: str):
         raise NotImplementedError()
 
     @abstractmethod

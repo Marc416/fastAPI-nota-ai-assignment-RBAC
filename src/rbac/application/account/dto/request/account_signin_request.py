@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class AccountSigInRequest(BaseModel):
-    email: str
+    email: EmailStr
     tenant_key: str
     password: str

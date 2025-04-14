@@ -32,13 +32,13 @@ class AccountCommandController:
 
     @router.post("/signup")
     def sign_up(self, request: AccountSignupRequest):
-        self.account_command_usecase.sign_up(
+        response: AccountSignInSuccessResponse = self.account_command_usecase.sign_up(
             email=request.email,
             password=request.password,
             tenant_key=request.tenant_key,
             role=request.role
         )
-        return {}
+        return HttpApiResponse.of(data= response)
 
     @router.post("/signin")
     def sign_in(self, request: AccountSigInRequest):
@@ -65,7 +65,7 @@ class AccountCommandController:
             change_password_request: ChangePasswordRequest,
             user: UserDetail = Depends(get_current_user),
     ):
-        self.account_command_usecase.chang_password(
+        self.account_command_usecase.change_password(
             account_id=user.account_id, new_password=change_password_request.new_password
         )
         return HttpApiResponse.ok()

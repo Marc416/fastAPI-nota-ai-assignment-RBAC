@@ -19,7 +19,7 @@ class Account(Base):
     tenant_key = Column(String(255), nullable=False)
     role = Column(SAEnum(AccountRole), nullable=False)
     status = Column(SAEnum(AccountStatus), default=AccountStatus.ACTIVE, nullable=False)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, default=datetime.now)
     deleted_at = Column(DateTime, nullable=True)
 
     # Factory method (companion object)
