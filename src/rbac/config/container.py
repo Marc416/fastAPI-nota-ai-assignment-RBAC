@@ -20,14 +20,16 @@ class Container(containers.DeclarativeContainer):
 
     db: providers.Resource[Session] = providers.Resource(get_db)
 
-    account_repository: AccountRepository = providers.Factory(AccountRepositoryImpl, db=db)
-
-    account_command_service: AccountCommandUseCase = providers.Factory(
-        AccountCommandService,
-        account_repository=account_repository
-    )
-
     jwt_token_provider: JwtTokenProvider = providers.Factory(
         JwtTokenProviderImpl,
         settings=settings
     )
+
+    account_repository: AccountRepository = providers.Factory(AccountRepositoryImpl, db=db)
+
+    account_command_service: AccountCommandUseCase = providers.Factory(
+        AccountCommandService,
+        account_repository=account_repository,
+        jwt_token_provider=jwt_token_provider
+    )
+
