@@ -1,9 +1,8 @@
 from datetime import datetime
 
 from passlib.context import CryptContext
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, String, Integer, Enum as SAEnum, DateTime
+from sqlalchemy.orm import declarative_base
 
 from rbac.domain.account.entity.account_role import AccountRole
 from rbac.domain.account.entity.account_status import AccountStatus
