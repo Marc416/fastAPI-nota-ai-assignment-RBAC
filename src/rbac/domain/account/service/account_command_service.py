@@ -53,13 +53,13 @@ class AccountCommandService(AccountCommandUseCase):
         return AccountSignInSuccessResponse(token=token)
 
     def change_password(self, account_id: int, new_password: str):
-        account: Account = self.account_repository.find_by_account_id(id=account_id)
+        account: Account = self.account_repository.get_by_account_id(id=account_id)
         account.change_password(new_password=new_password)
         self.account_repository.save(account)
         pass
 
     def delete_account(self, account_id: int):
-        account: Account = self.account_repository.find_by_account_id(id=account_id)
+        account: Account = self.account_repository.get_by_account_id(id=account_id)
         account.delete()
         self.account_repository.save(account)
         pass
