@@ -9,7 +9,7 @@ class AccountRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def find_by_account_id(self):
+    def find_by_account_id(self, id: int) -> Account:
         raise NotImplementedError()
 
     @abstractmethod

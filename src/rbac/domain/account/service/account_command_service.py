@@ -25,7 +25,6 @@ class AccountCommandService(AccountCommandUseCase):
         self.account_repository = account_repository
         self.jwt_token_provider = jwt_token_provider
 
-
     def sign_up(self, email: str, password: str, tenant_key: str,
                 role: AccountRole) -> AccountSignupSuccessResponse:
         account: Account = Account.create_active_account(email, password, tenant_key, role)
@@ -38,7 +37,7 @@ class AccountCommandService(AccountCommandUseCase):
             tenant_key=tenant_key
         )
 
-        if(not account.is_password_valid(password)):
+        if (not account.is_password_valid(password)):
             # TODO : HTTP 예외처리해야함
             raise ValueError("Invalid password")
 
@@ -47,11 +46,17 @@ class AccountCommandService(AccountCommandUseCase):
             tenant_key=account.tenant_key,
             role=account.role
         ).to_map()
-        token = self.jwt_token_provider.generate_token(payload=account_payload_map, ttl=36000)
+        token = self.jwt_token_provider.generate_token(payload=account_payload_map, ttl=60 * 60 * 24 * 7)  # 7일
         return AccountSignInSuccessResponse(token=token)
 
-    def chang_password(self, user_id: int, new_password: str):
+    def chang_password(self, account_id: int, new_password: str):
+        account: Account = self.account_repository.find_by_account_id(id=account_id)
+        account.change_password(new_password=new_password)
+        self.account_repository.save(account)
         pass
 
     def delete_account(self, account_id: int):
+        account: Account = self.account_repository.find_by_account_id(id=account_id)
+        account.delete()
+        self.account_repository.save(account)
         pass

@@ -28,8 +28,7 @@ class Account(Base):
     def create_active_account(cls, email: str, raw_password: str, tenant_key: str, role: AccountRole):
         return cls(
             email=email,
-            password=raw_password,
-            # password=pwd_context.hash(raw_password),
+            password=pwd_context.hash(raw_password),
             tenant_key=tenant_key,
             role=role,
             status=AccountStatus.ACTIVE,

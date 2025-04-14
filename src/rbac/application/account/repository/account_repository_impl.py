@@ -18,8 +18,14 @@ class AccountRepositoryImpl(AccountRepository):
         self.db.refresh(account)
         return account
 
-    def find_by_account_id(self):
-        pass
+    def find_by_account_id(self, id: int) -> Account:
+        account: Optional[Account] = self.db.query(Account).filter(
+            Account.id == id
+        ).first()
+        if account is None:
+            # TODO : 회원 없을 때 예외 처리
+            raise ValueError("Account not found")
+        return account
 
     def find_by_email_and_tenant_key(self, email: str, tenant_key: str) -> Account:
         account: Optional[Account] = self.db.query(Account).filter(

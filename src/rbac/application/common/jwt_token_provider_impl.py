@@ -1,8 +1,8 @@
-from typing import Dict, Any, Container
+from datetime import datetime, timedelta
+from typing import Dict, Any
 
 import jwt
-from dependency_injector.wiring import Provide, inject
-from fastapi import Depends
+from dependency_injector.wiring import inject
 from jwt import PyJWTError
 
 from rbac.config.settings import Settings
@@ -29,6 +29,12 @@ class JwtTokenProviderImpl(JwtTokenProvider):
             return False
 
     def generate_token(self, payload: Dict[str, Any], ttl: int) -> str:
+        now = datetime.now()
+        payload.update({
+            "iat": int(now.timestamp()),
+            "exp": int((now + timedelta(seconds=ttl)).timestamp()),
+            "iss": "nota.ai" # TODO 고민
+        })
         return jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
 
     def __verify_token(self, token: str) -> Dict[str, Any]:
