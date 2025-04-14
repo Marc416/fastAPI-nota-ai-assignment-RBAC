@@ -21,13 +21,9 @@ class AccountCommandUseCase(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def chang_password(self, user_id: int, new_password: str):
+    def change_password(self, account_id: int, new_password: str):
         raise NotImplementedError()
 
     @abstractmethod
     def delete_account(self, account_id: int):
-        raise NotImplementedError()
-
-    @abstractmethod
-    def test(self):
         raise NotImplementedError()
