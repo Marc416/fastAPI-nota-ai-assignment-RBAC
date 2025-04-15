@@ -18,7 +18,7 @@ class AccountRepositoryImpl(AccountRepository):
         self.db.refresh(account)
         return account
 
-    def find_by_account_id(self, id: int) -> Account:
+    def get_by_account_id(self, id: int) -> Account:
         account: Optional[Account] = self.db.query(Account).filter(
             Account.id == id
         ).first()
