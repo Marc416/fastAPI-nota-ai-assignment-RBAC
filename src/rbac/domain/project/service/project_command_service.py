@@ -22,7 +22,19 @@ class ProjectCommandService(ProjectCommandUseCase):
         self.project_member_repository = project_member_repository
 
     def add_member(self, project_id: int, member_requests: List[MemberRequest]) -> ProjectResponse:
-        pass
+        project: Project = self.project_repository.get_by_id(project_id)
+        project_members = []
+        for member_request in member_requests:
+            project_member: ProjectMember = ProjectMember.create(
+                project_id=project.id,
+                account_id=member_request.account_id,
+                role=member_request.role,
+            )
+            project_members.append(project_member)
+
+        self.project_member_repository.save_all(project_members)
+        return ProjectResponse(project_id=project.id)
+
 
     def remove_member(self, project_id: int, member_ids: List[int]) -> ProjectResponse:
         pass

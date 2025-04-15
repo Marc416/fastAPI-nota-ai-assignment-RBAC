@@ -5,6 +5,7 @@ from fastapi_utils.cbv import cbv
 from rbac.application.account.dto.request.project_update_request import ProjectUpdateRequest
 from rbac.application.common.http_response.http_api_response import HttpApiResponse
 from rbac.application.common.user_detail import UserDetail
+from rbac.application.project.dto.request.project_add_member_request import ProjectAddMemberRequest
 from rbac.application.project.dto.request.project_create_request import ProjectCreateRequest
 from rbac.config.auth.authentication import get_current_user
 from rbac.config.container import Container
@@ -68,5 +69,22 @@ class ProjectCommandController:
         """
         response: ProjectResponse = self.project_command_usecase.delete_project(
             project_id=project_id
+        )
+        return HttpApiResponse.of(response)
+
+
+    @router.post("/{project_id}/member")
+    def add_member(
+            self,
+            project_id: int,
+            request: ProjectAddMemberRequest,
+            user_detail: UserDetail = Depends(get_current_user),
+    ):
+        """
+        Add members to an existing project
+        """
+        response: ProjectResponse = self.project_command_usecase.add_member(
+            project_id=project_id,
+            member_requests=request.member_requests
         )
         return HttpApiResponse.of(response)
