@@ -18,6 +18,6 @@ class ProjectRepository(ABC):
     def find_by_id(self, id: int) -> Optional[Project]:
         raise NotImplementedError()
 
-    # @abstractmethod
-    # def get_projects(self, size: int, next_cursor: Optional[str]) -> SliceContent[Project]:
-    #     raise NotImplementedError()
+    @abstractmethod
+    def get_projects(self, size: int, next_cursor: Optional[str]) -> SliceContent[Project]:
+        raise NotImplementedError()

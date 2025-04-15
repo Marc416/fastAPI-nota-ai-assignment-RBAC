@@ -14,7 +14,7 @@ from rbac.domain.project.dto.response.project_response import ProjectResponse
 # from rbac.domain.project.dto.response.project_response import ProjectResponse
 from rbac.domain.project.service.project_command_usecase import ProjectCommandUseCase
 
-router = APIRouter(prefix="/project", tags=["project"])
+router = APIRouter(prefix="/project", tags=["project-command"])
 
 
 @cbv(router)
