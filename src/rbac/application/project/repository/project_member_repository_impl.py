@@ -59,3 +59,11 @@ class ProjectMemberRepositoryImpl(ProjectMemberRepository):
                 ProjectMember.deleted_at.is_(None)
             )
         ).first()
+
+    def find_by_project_id(self, project_id: int) -> List[ProjectMember]:
+        return  self.db.query(ProjectMember).filter(
+            and_(
+                ProjectMember.project_id == project_id,
+                ProjectMember.deleted_at.is_(None)
+            )
+        ).all()

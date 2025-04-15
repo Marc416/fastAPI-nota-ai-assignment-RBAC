@@ -16,3 +16,7 @@ class ProjectMemberRepository(ABC):
     @abstractmethod
     def find_by_account_id_and_project_id(self, account_id: int, project_id: int) -> Optional[ProjectMember]:
         raise NotImplementedError()
+
+    @abstractmethod
+    def find_by_project_id(self, project_id: int) -> List[ProjectMember]:
+        raise NotImplementedError()

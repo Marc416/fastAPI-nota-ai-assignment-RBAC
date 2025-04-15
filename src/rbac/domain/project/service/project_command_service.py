@@ -37,7 +37,23 @@ class ProjectCommandService(ProjectCommandUseCase):
 
 
     def remove_member(self, project_id: int, member_ids: List[int]) -> ProjectResponse:
-        pass
+        project: Project = self.project_repository.get_by_id(project_id)
+        project_members:List[ProjectMember]= self.project_member_repository.find_by_project_id(project.id)
+        # TODO : 이하 리팩터링 필요(기존 jpa에서 사용하던 애그리게이트 개념을 사용할 수 없음-아직 몰라서 못하는듯 )
+        member_map = {member.account_id: member for member in project_members}
+        members = []
+        for member_id in member_ids:
+            if member_id not in member_map:
+                # TODO 예외처리필요
+                print("좀있다가 처리")
+                # raise ApplicationException(
+                #     code=CodeEnum.FRS_001,
+                #     message=f"Id: {member_id} 는 멤버가 아닙니다."
+                # )
+            member_map[member_id].remove_from_project()
+            members.append(member_map[member_id])
+        self.project_member_repository.update_all(members)
+        return ProjectResponse(project_id=project.id)
 
     def update_project(self, project_id: int, new_title: str) -> ProjectResponse:
         project :Project = self.project_repository.get_by_id(project_id)

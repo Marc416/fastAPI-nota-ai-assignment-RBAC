@@ -2,6 +2,7 @@ from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends
 from fastapi_utils.cbv import cbv
 
+from rbac.application.account.dto.request.project_remove_member_request import ProjectRemoveMemberRequest
 from rbac.application.account.dto.request.project_update_request import ProjectUpdateRequest
 from rbac.application.common.http_response.http_api_response import HttpApiResponse
 from rbac.application.common.user_detail import UserDetail
@@ -73,7 +74,7 @@ class ProjectCommandController:
         return HttpApiResponse.of(response)
 
 
-    @router.post("/{project_id}/member")
+    @router.post("/{project_id}/members")
     def add_member(
             self,
             project_id: int,
@@ -86,5 +87,21 @@ class ProjectCommandController:
         response: ProjectResponse = self.project_command_usecase.add_member(
             project_id=project_id,
             member_requests=request.member_requests
+        )
+        return HttpApiResponse.of(response)
+
+    @router.delete("/{project_id}/members")
+    def remove_member(
+            self,
+            project_id: int,
+            request: ProjectRemoveMemberRequest,
+            user_detail: UserDetail = Depends(get_current_user),
+    ):
+        """
+        Remove members from an existing project
+        """
+        response: ProjectResponse = self.project_command_usecase.remove_member(
+            project_id=project_id,
+            member_ids=request.member_ids
         )
         return HttpApiResponse.of(response)
