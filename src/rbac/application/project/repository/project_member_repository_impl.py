@@ -39,7 +39,6 @@ class ProjectMemberRepositoryImpl(ProjectMemberRepository):
         return saved_members
 
     def update_all(self, members: List[ProjectMember]) -> List[ProjectMember]:
-        updated_members = []
         for member in members:
             existing = self.db.query(ProjectMember).filter(
                 and_(
