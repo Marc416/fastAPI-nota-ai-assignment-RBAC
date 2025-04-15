@@ -3,6 +3,7 @@ import logging
 from fastapi import FastAPI
 
 from rbac.application.account.controller import account_command_controller
+from rbac.application.middleware.request_context_middleware import RequestContextMiddleware
 from rbac.application.project.controller import project_command_controller, project_query_controller
 from rbac.utils.life import lifespan
 
@@ -13,6 +14,7 @@ logging.basicConfig(
 )
 
 app = FastAPI(lifespan=lifespan)
+app.add_middleware(RequestContextMiddleware)
 
 
 app.include_router(account_command_controller.router)

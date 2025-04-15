@@ -13,7 +13,7 @@ class ProjectMember(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     project_id = Column(Integer, nullable=False)
     account_id = Column(Integer, nullable=False)
-    role = Column(SAEnum(ProjectRole), nullable=False)
+    role :ProjectRole = Column(SAEnum(ProjectRole), nullable=False)
     created_at = Column(DateTime, default=datetime.now)
     deleted_at = Column(DateTime, nullable=True)
 

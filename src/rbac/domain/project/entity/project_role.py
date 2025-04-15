@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 from enum import Enum, auto
 from typing import Set
-from __future__ import annotations
 
 from fastapi import HTTPException
 
@@ -15,6 +16,15 @@ class ProjectRole(str, Enum):
     EDITOR = auto()
     PROJECT_OWNER = auto()
 
+    def description(self) -> str:
+        return _PROJECT_ROLE_DESCRIPTIONS[self]
+
+    def get_all_roles(self) -> Set[ProjectRole]:
+        roles = {self}
+        for inherited in _PROJECT_ROLE_INHERITANCE.get(self, set()):
+            roles.update(inherited.get_all_roles())
+        return roles
+
     @classmethod
     def from_str(cls, value: str) -> ProjectRole:
         try:
@@ -22,20 +32,15 @@ class ProjectRole(str, Enum):
         except ValueError:
             raise HTTPException(status_code=400, detail=f"Invalid role: {value}")
 
-ROLE_DESCRIPTIONS = {
+
+_PROJECT_ROLE_DESCRIPTIONS = {
     ProjectRole.VIEWER: "뷰어",
     ProjectRole.EDITOR: "편집자",
     ProjectRole.PROJECT_OWNER: "프로젝트 소유자",
 }
 
-ROLE_INHERITANCE = {
+_PROJECT_ROLE_INHERITANCE = {
     ProjectRole.VIEWER: set(),
     ProjectRole.EDITOR: {ProjectRole.VIEWER},
     ProjectRole.PROJECT_OWNER: {ProjectRole.EDITOR},
 }
-
-def get_all_roles(role: ProjectRole) -> Set[ProjectRole]:
-    roles = {role}
-    for inherited in ROLE_INHERITANCE.get(role, set()):
-        roles.update(get_all_roles(inherited))
-    return roles
