@@ -34,7 +34,10 @@ class ProjectCommandService(ProjectCommandUseCase):
         return ProjectResponse(project_id=project.id)
 
     def delete_project(self, project_id: int) -> ProjectResponse:
-        pass
+        project: Project = self.project_repository.get_by_id(project_id)
+        project.delete()
+        self.project_repository.save(project)
+        return ProjectResponse(project_id=project.id)
 
     def create_project(self, title: str, owner_id: int, member_requests: List[MemberRequest]) -> ProjectResponse:
         project: Project = Project.create_active_project(

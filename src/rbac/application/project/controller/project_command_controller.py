@@ -56,3 +56,17 @@ class ProjectCommandController:
             new_title=request.title
         )
         return HttpApiResponse.of(response)
+
+    @router.delete("/{project_id}")
+    def delete_project(
+            self,
+            project_id: int,
+            user_detail: UserDetail = Depends(get_current_user),
+    ):
+        """
+        Delete an existing project
+        """
+        response: ProjectResponse = self.project_command_usecase.delete_project(
+            project_id=project_id
+        )
+        return HttpApiResponse.of(response)
