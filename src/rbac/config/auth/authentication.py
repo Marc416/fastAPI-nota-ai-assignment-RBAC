@@ -27,7 +27,10 @@ def get_current_user(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
 
-def get_current_user_from_request(request: Request, jwt_token_provider: JwtTokenProvider = Depends(Provide[Container.jwt_token_provider])) -> UserDetail:
+def get_current_user_from_request(
+        request: Request,
+        jwt_token_provider: JwtTokenProvider = Depends(Provide[Container.jwt_token_provider])
+) -> UserDetail:
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing or invalid Authorization header")
@@ -40,5 +43,5 @@ def get_current_user_from_request(request: Request, jwt_token_provider: JwtToken
             tenant_key=payload.tenant_key,
             role=AccountRole.from_str(payload.role)
         )
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    except JWTError as e:
+        raise HTTPException(status_code=401, detail="Invalid token") from e
