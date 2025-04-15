@@ -2,6 +2,7 @@ from dependency_injector.wiring import inject, Provide
 from fastapi import APIRouter, Depends
 from fastapi_utils.cbv import cbv
 
+from rbac.application.account.dto.request.project_update_request import ProjectUpdateRequest
 from rbac.application.common.http_response.http_api_response import HttpApiResponse
 from rbac.application.common.user_detail import UserDetail
 from rbac.application.project.dto.request.project_create_request import ProjectCreateRequest
@@ -25,7 +26,7 @@ class ProjectCommandController:
         self.project_command_usecase = project_command_usecase
 
     @router.post("/")
-    async def create_project(
+    def create_project(
             self,
             request: ProjectCreateRequest,
             user_detail: UserDetail = Depends(get_current_user),
@@ -37,5 +38,21 @@ class ProjectCommandController:
             title=request.title,
             owner_id=user_detail.account_id,
             member_requests=request.member_requests
+        )
+        return HttpApiResponse.of(response)
+
+    @router.put("/{project_id}")
+    def update_project(
+            self,
+            project_id: int,
+            request: ProjectUpdateRequest,
+            user_detail: UserDetail = Depends(get_current_user),
+    ):
+        """
+        Update an existing project
+        """
+        response: ProjectResponse = self.project_command_usecase.update_project(
+            project_id=project_id,
+            new_title=request.title
         )
         return HttpApiResponse.of(response)

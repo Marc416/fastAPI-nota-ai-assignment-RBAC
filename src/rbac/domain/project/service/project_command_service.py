@@ -28,7 +28,10 @@ class ProjectCommandService(ProjectCommandUseCase):
         pass
 
     def update_project(self, project_id: int, new_title: str) -> ProjectResponse:
-        pass
+        project :Project = self.project_repository.get_by_id(project_id)
+        project.update_title(new_title)
+        self.project_repository.save(project)
+        return ProjectResponse(project_id=project.id)
 
     def delete_project(self, project_id: int) -> ProjectResponse:
         pass
