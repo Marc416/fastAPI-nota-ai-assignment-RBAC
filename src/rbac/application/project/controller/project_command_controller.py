@@ -29,6 +29,7 @@ class ProjectCommandController:
         self.project_command_usecase = project_command_usecase
 
     @router.post("/")
+    @check_project_role(ProjectRole.PROJECT_OWNER)
     def create_project(
             self,
             request: ProjectCreateRequest,
@@ -62,6 +63,7 @@ class ProjectCommandController:
         return HttpApiResponse.of(response)
 
     @router.delete("/{project_id}")
+    @check_project_role(ProjectRole.PROJECT_OWNER)
     def delete_project(
             self,
             project_id: int,
@@ -77,6 +79,7 @@ class ProjectCommandController:
 
 
     @router.post("/{project_id}/members")
+    @check_project_role(ProjectRole.PROJECT_OWNER)
     def add_member(
             self,
             project_id: int,
@@ -93,6 +96,7 @@ class ProjectCommandController:
         return HttpApiResponse.of(response)
 
     @router.delete("/{project_id}/members")
+    @check_project_role(ProjectRole.PROJECT_OWNER)
     def remove_member(
             self,
             project_id: int,
