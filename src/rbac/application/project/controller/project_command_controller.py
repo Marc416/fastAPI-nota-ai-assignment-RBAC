@@ -6,12 +6,13 @@ from rbac.application.account.dto.request.project_remove_member_request import P
 from rbac.application.account.dto.request.project_update_request import ProjectUpdateRequest
 from rbac.application.common.http_response.http_api_response import HttpApiResponse
 from rbac.application.common.user_detail import UserDetail
+from rbac.application.decorator.check_project_role import check_project_role
 from rbac.application.project.dto.request.project_add_member_request import ProjectAddMemberRequest
 from rbac.application.project.dto.request.project_create_request import ProjectCreateRequest
 from rbac.config.auth.authentication import get_current_user
 from rbac.config.container import Container
 from rbac.domain.project.dto.response.project_response import ProjectResponse
-# from rbac.domain.project.dto.response.project_response import ProjectResponse
+from rbac.domain.project.entity.project_role import ProjectRole
 from rbac.domain.project.service.project_command_usecase import ProjectCommandUseCase
 
 router = APIRouter(prefix="/project", tags=["project-command"])
@@ -28,6 +29,7 @@ class ProjectCommandController:
         self.project_command_usecase = project_command_usecase
 
     @router.post("/")
+    @check_project_role(ProjectRole.PROJECT_OWNER)
     def create_project(
             self,
             request: ProjectCreateRequest,
@@ -44,6 +46,7 @@ class ProjectCommandController:
         return HttpApiResponse.of(response)
 
     @router.put("/{project_id}")
+    @check_project_role(ProjectRole.EDITOR)
     def update_project(
             self,
             project_id: int,
@@ -60,6 +63,7 @@ class ProjectCommandController:
         return HttpApiResponse.of(response)
 
     @router.delete("/{project_id}")
+    @check_project_role(ProjectRole.PROJECT_OWNER)
     def delete_project(
             self,
             project_id: int,
@@ -75,6 +79,7 @@ class ProjectCommandController:
 
 
     @router.post("/{project_id}/members")
+    @check_project_role(ProjectRole.PROJECT_OWNER)
     def add_member(
             self,
             project_id: int,
@@ -91,6 +96,7 @@ class ProjectCommandController:
         return HttpApiResponse.of(response)
 
     @router.delete("/{project_id}/members")
+    @check_project_role(ProjectRole.PROJECT_OWNER)
     def remove_member(
             self,
             project_id: int,
