@@ -34,7 +34,7 @@ class AccountRole(str, Enum):
     ADMIN = auto()
 
     @classmethod
-    def from_str(cls, value: str) -> "AccountRole":
+    def from_str(cls, value: str) -> AccountRole:
         try:
             return cls(value)
         except ValueError:

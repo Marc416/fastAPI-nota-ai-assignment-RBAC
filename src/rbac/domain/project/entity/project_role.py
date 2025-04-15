@@ -1,5 +1,6 @@
 from enum import Enum, auto
 from typing import Set
+from __future__ import annotations
 
 from fastapi import HTTPException
 
@@ -15,7 +16,7 @@ class ProjectRole(str, Enum):
     PROJECT_OWNER = auto()
 
     @classmethod
-    def from_str(cls, value: str) -> "AccountRole":
+    def from_str(cls, value: str) -> ProjectRole:
         try:
             return cls(value)
         except ValueError:

@@ -23,7 +23,10 @@ class ProjectRepositoryImpl(ProjectRepository):
 
     def get_by_id(self, id: int) -> Project:
         project: Optional[Project] = self.db.query(Project).filter(
-            Project.id == id and Project.status == ProjectStatus.ACTIVE
+            and_(
+                Project.id == id,
+                Project.status == ProjectStatus.ACTIVE
+            )
         ).first()
         if project is None:
             # TODO : 프로젝트 없을 때 예외 처리
@@ -32,7 +35,10 @@ class ProjectRepositoryImpl(ProjectRepository):
 
     def find_by_id(self, id: int) -> Optional[Project]:
         project: Optional[Project] = self.db.query(Project).filter(
-            Project.id == id and Project.status == ProjectStatus.ACTIVE
+            and_(
+                Project.id == id,
+                Project.status == ProjectStatus.ACTIVE
+            )
         ).first()
         return project
 
@@ -40,10 +46,11 @@ class ProjectRepositoryImpl(ProjectRepository):
         query = self.db.query(Project)
 
         if next_cursor:
+            cursor_val = int(next_cursor)
             # 커서 이후의 ID만 조회
             query = query.filter(
                 and_(
-                    Project.id <= next_cursor,
+                    Project.id <= cursor_val,
                     Project.status == ProjectStatus.ACTIVE
                 )
             )

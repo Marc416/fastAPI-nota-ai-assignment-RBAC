@@ -19,6 +19,7 @@ from rbac.domain.project.repository.project_repository import ProjectRepository
 from rbac.domain.project.service.project_command_service import ProjectCommandService
 from rbac.domain.project.service.project_command_usecase import ProjectCommandUseCase
 from rbac.domain.project.service.project_query_service import ProjectQueryService
+from rbac.domain.project.service.project_query_usecase import ProjectQueryUseCase
 
 
 class Container(containers.DeclarativeContainer):
@@ -57,7 +58,7 @@ class Container(containers.DeclarativeContainer):
         project_member_repository=project_member_repository
     )
 
-    project_query_usecase: ProjectCommandUseCase = providers.Factory(
+    project_query_usecase: ProjectQueryUseCase = providers.Factory(
         ProjectQueryService,
         project_repository=project_repository,
     )

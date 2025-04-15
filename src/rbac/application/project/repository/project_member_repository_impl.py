@@ -26,15 +26,20 @@ class ProjectMemberRepositoryImpl(ProjectMemberRepository):
             if existing:
                 existing.role = member.role
                 existing.deleted_at = None
+                saved_members.append(existing)
             else:
                 self.db.add(member)
-
-            saved_members.append(member)
+                saved_members.append(member)
 
         self.db.commit()
+
+        # 객체 동기화
+        for member in saved_members:
+            self.db.refresh(member)
         return saved_members
 
     def update_all(self, members: List[ProjectMember]) -> List[ProjectMember]:
+        updated_members = []
         for member in members:
             existing = self.db.query(ProjectMember).filter(
                 and_(
