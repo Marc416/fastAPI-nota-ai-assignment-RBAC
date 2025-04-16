@@ -23,7 +23,7 @@ SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 def get_db():
     db: Session = SessionLocal()
     try:
-        yield db
+        return db
     except SQLAlchemyError as e:
         logger.error(f"Database connection error: {e}")
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
