@@ -6,8 +6,8 @@ from rbac.application.account.repository.account_repository_impl import AccountR
 from rbac.application.common.jwt_token_provider_impl import JwtTokenProviderImpl
 from rbac.application.project.repository.project_member_repository_impl import ProjectMemberRepositoryImpl
 from rbac.application.project.repository.project_repository_impl import ProjectRepositoryImpl
-from rbac.config.db.database import get_db
-from rbac.config.settings import Settings
+from rbac.application.config.db.database import get_db
+from rbac.application.config.settings import Settings
 from rbac.domain.account.repository.account_repository import AccountRepository
 from rbac.domain.account.service.account_command_service import AccountCommandService
 from rbac.domain.account.service.account_command_usercase import AccountCommandUseCase
@@ -27,11 +27,11 @@ class Container(containers.DeclarativeContainer):
         packages=["rbac"]
     )
 
-    settings: Settings = providers.Factory(Settings)
+    settings: Settings = providers.Singleton(Settings)
 
     db: providers.Resource[Session] = providers.Resource(get_db)
 
-    jwt_token_provider: JwtTokenProvider = providers.Factory(
+    jwt_token_provider: JwtTokenProvider = providers.Singleton(
         JwtTokenProviderImpl,
         settings=settings
     )
@@ -41,24 +41,24 @@ class Container(containers.DeclarativeContainer):
         email_service_port=EmailServicePortStubImpl()
     )
 
-    account_repository: AccountRepository = providers.Factory(AccountRepositoryImpl, db=db)
+    account_repository: AccountRepository = providers.Singleton(AccountRepositoryImpl, db=db)
 
-    project_repository: ProjectRepository = providers.Factory(ProjectRepositoryImpl, db=db)
-    project_member_repository: ProjectMemberRepository = providers.Factory(ProjectMemberRepositoryImpl, db=db)
+    project_repository: ProjectRepository = providers.Singleton(ProjectRepositoryImpl, db=db)
+    project_member_repository: ProjectMemberRepository = providers.Singleton(ProjectMemberRepositoryImpl, db=db)
 
-    account_command_usecase: AccountCommandUseCase = providers.Factory(
+    account_command_usecase: AccountCommandUseCase = providers.Singleton(
         AccountCommandService,
         account_repository=account_repository,
         jwt_token_provider=jwt_token_provider
     )
 
-    project_command_usecase: ProjectCommandUseCase = providers.Factory(
+    project_command_usecase: ProjectCommandUseCase = providers.Singleton(
         ProjectCommandService,
         project_repository=project_repository,
         project_member_repository=project_member_repository
     )
 
-    project_query_usecase: ProjectQueryUseCase = providers.Factory(
+    project_query_usecase: ProjectQueryUseCase = providers.Singleton(
         ProjectQueryService,
         project_repository=project_repository,
     )
