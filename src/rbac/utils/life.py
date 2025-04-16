@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 import logging
 
-from rbac.config.container import Container
-from rbac.config.db.database import engine
+from rbac.application.config.container import Container
+from rbac.application.config.db.database import engine
 
 logger = logging.getLogger(__name__)
 

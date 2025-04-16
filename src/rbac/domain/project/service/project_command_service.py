@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from dependency_injector.wiring import inject
@@ -10,6 +11,7 @@ from rbac.domain.project.repository.project_member_repository import ProjectMemb
 from rbac.domain.project.repository.project_repository import ProjectRepository
 from rbac.domain.project.service.project_command_usecase import ProjectCommandUseCase
 
+logger = logging.getLogger(__name__)
 
 class ProjectCommandService(ProjectCommandUseCase):
     @inject
@@ -44,12 +46,8 @@ class ProjectCommandService(ProjectCommandUseCase):
         members = []
         for member_id in member_ids:
             if member_id not in member_map:
-                # TODO 예외처리필요
-                print("좀있다가 처리")
-                # raise ApplicationException(
-                #     code=CodeEnum.FRS_001,
-                #     message=f"Id: {member_id} 는 멤버가 아닙니다."
-                # )
+                # 예외처리로 하지 않음.
+                logger.warning("Member ID %s not found in project members", member_id)
             member_map[member_id].remove_from_project()
             members.append(member_map[member_id])
         self.project_member_repository.update_all(members)

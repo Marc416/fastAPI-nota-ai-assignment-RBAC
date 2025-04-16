@@ -5,7 +5,9 @@ import jwt
 from dependency_injector.wiring import inject
 from jwt import PyJWTError
 
-from rbac.config.settings import Settings
+from rbac.application.common.http_response.code_enum import CodeEnum
+from rbac.application.config.settings import Settings
+from rbac.application.exception.application_exception import ApplicationException
 from rbac.domain.account.dto.account_jwt_payload import AccountJwtPayload
 from rbac.domain.common.jwt_token_provider import JwtTokenProvider
 
@@ -45,5 +47,5 @@ class JwtTokenProviderImpl(JwtTokenProvider):
                 algorithms=[self.algorithm]
             )
             return decoded  # dict 형태로 반환됨
-        except PyJWTError as e:
-            raise ValueError(f"Invalid JWT token: {e}")
+        except PyJWTError:
+            raise ApplicationException(code = CodeEnum.FRS_003, message="Invalid token")

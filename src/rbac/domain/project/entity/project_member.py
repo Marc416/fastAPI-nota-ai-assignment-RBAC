@@ -1,9 +1,8 @@
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, DateTime, Enum as SAEnum
-from sqlalchemy.orm import declarative_base, relationship
 
-from rbac.config.db.base import Base
+from rbac.application.config.db.base import Base
 from rbac.domain.project.entity.project_role import ProjectRole
 
 

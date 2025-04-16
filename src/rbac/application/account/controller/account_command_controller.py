@@ -11,8 +11,8 @@ from rbac.application.account.dto.response.account_signin_success_response impor
 from rbac.application.common.http_response.http_api_response import HttpApiResponse
 from rbac.application.common.user_detail import UserDetail
 from rbac.application.decorator.check_role import check_role
-from rbac.config.auth.authentication import get_current_user
-from rbac.config.container import Container
+from rbac.application.config.auth.authentication import get_current_user
+from rbac.application.config.container import Container
 from rbac.domain.account.entity.account_role import AccountRole
 from rbac.domain.account.service.account_command_usercase import AccountCommandUseCase
 from rbac.domain.account.service.email_verify_usecase import EmailVerifyUseCase

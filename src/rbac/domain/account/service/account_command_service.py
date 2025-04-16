@@ -1,11 +1,9 @@
-from ast import Index
-from typing import Optional
-
-from dependency_injector.wiring import inject, Provide
-from fastapi import Depends
+from dependency_injector.wiring import inject
 
 from rbac.application.account.dto.response.account_sign_in_success_response import AccountSignInSuccessResponse
 from rbac.application.account.dto.response.account_signup_success_response import AccountSignupSuccessResponse
+from rbac.application.common.http_response.code_enum import CodeEnum
+from rbac.application.exception.application_exception import ApplicationException
 from rbac.domain.account.dto.account_jwt_payload import AccountJwtPayload
 from rbac.domain.account.entity.account import Account
 from rbac.domain.account.entity.account_role import AccountRole
@@ -41,8 +39,7 @@ class AccountCommandService(AccountCommandUseCase):
         )
 
         if (not account.is_password_valid(password)):
-            # TODO : HTTP 예외처리해야함
-            raise ValueError("Invalid password")
+            raise ApplicationException(code= CodeEnum.FRS_003, message="Invalid password")
 
         account_payload_map = AccountJwtPayload(
             account_id=account.id,

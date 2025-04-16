@@ -3,6 +3,8 @@ from typing import Optional
 from dependency_injector.wiring import inject, Provide
 from sqlalchemy.orm import Session
 
+from rbac.application.common.http_response.code_enum import CodeEnum
+from rbac.application.exception.application_exception import ApplicationException
 from rbac.domain.account.entity.account import Account
 from rbac.domain.account.repository.account_repository import AccountRepository
 
@@ -23,8 +25,7 @@ class AccountRepositoryImpl(AccountRepository):
             Account.id == id
         ).first()
         if account is None:
-            # TODO : 회원 없을 때 예외 처리
-            raise ValueError("Account not found")
+            raise ApplicationException(code= CodeEnum.FRS_001, message="Account not found")
         return account
 
     def find_by_email_and_tenant_key(self, email: str, tenant_key: str) -> Account:
@@ -33,6 +34,5 @@ class AccountRepositoryImpl(AccountRepository):
             Account.tenant_key == tenant_key
         ).first()
         if account is None:
-            # TODO : 회원 없을 때 예외 처리
-            raise ValueError("Account not found")
+            raise ApplicationException(code= CodeEnum.FRS_001, message="Account not found")
         return account

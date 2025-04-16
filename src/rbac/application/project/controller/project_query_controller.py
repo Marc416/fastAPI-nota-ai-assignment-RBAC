@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from fastapi_utils.cbv import cbv
 
 from rbac.application.common.http_response.http_api_response import HttpApiResponse
-from rbac.config.container import Container
+from rbac.application.config.container import Container
 from rbac.domain.project.dto.response.project_view_response import ProjectViewResponse
 from rbac.domain.project.service.project_query_usecase import ProjectQueryUseCase
 from rbac.utils.slice_content import SliceContent

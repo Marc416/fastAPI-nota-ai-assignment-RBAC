@@ -6,7 +6,7 @@ from starlette.status import HTTP_403_FORBIDDEN
 
 from rbac.application.common.user_detail import UserDetail
 from rbac.application.middleware.context import request_context
-from rbac.config.auth.authentication import get_current_user_from_request
+from rbac.application.config.auth.authentication import get_current_user_from_request
 from rbac.domain.account.entity.account_role import AccountRole
 
 

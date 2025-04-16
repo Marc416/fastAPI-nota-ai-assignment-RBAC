@@ -1,13 +1,14 @@
 from functools import wraps
 
 from dependency_injector.wiring import Provide
-from fastapi import Request, HTTPException, Depends
-from starlette.status import HTTP_403_FORBIDDEN
+from fastapi import Request, Depends
 
+from rbac.application.common.http_response.code_enum import CodeEnum
 from rbac.application.common.user_detail import UserDetail
+from rbac.application.config.auth.authentication import get_current_user_from_request
+from rbac.application.config.container import Container
+from rbac.application.exception.application_exception import ApplicationException
 from rbac.application.middleware.context import request_context
-from rbac.config.auth.authentication import get_current_user, get_current_user_from_request
-from rbac.config.container import Container
 from rbac.domain.account.entity.account_role import AccountRole
 from rbac.domain.project.entity.project_role import ProjectRole
 from rbac.domain.project.repository.project_member_repository import ProjectMemberRepository
@@ -19,10 +20,13 @@ def check_project_role(required_role: ProjectRole):
         @wraps(func)
         def wrapper(*args, **kwargs):
             request: Request = request_context.get()
-            project_id: str = request.path_params.get("project_id")
+            project_id: int = request.path_params.get("project_id")
             user_detail: UserDetail = get_current_user_from_request(request)
             if not project_id:
-                raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="프로젝트 ID가 필요합니다")
+                raise ApplicationException(
+                    code=CodeEnum.FRS_003,
+                    message="프로젝트 ID가 필요합니다"
+                )
 
             if required_role == ProjectRole.VIEWER:
                 return func(*args, **kwargs)
@@ -33,7 +37,10 @@ def check_project_role(required_role: ProjectRole):
                     project_id=project_id,
                     required_role=required_role
             ):
-                raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="프로젝트 접근 권한이 없습니다")
+                raise ApplicationException(
+                    code=CodeEnum.FRS_002,
+                    message="프로젝트 접근 권한이 없습니다"
+                )
             return func(*args, **kwargs)
         return wrapper
     return decorator
