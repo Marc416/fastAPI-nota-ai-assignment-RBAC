@@ -3,12 +3,11 @@ from datetime import datetime
 from passlib.context import CryptContext
 from pydantic import Field
 from sqlalchemy import Column, String, Integer, Enum as SAEnum, DateTime
-from sqlalchemy.orm import declarative_base
 
+from rbac.application.config.db.base import Base
 from rbac.domain.account.entity.account_role import AccountRole
 from rbac.domain.account.entity.account_status import AccountStatus
 
-Base = declarative_base()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class Account(Base):
