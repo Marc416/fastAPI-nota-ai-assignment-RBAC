@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from passlib.context import CryptContext
+from pydantic import Field
 from sqlalchemy import Column, String, Integer, Enum as SAEnum, DateTime
 from sqlalchemy.orm import declarative_base
 
@@ -24,7 +25,7 @@ class Account(Base):
 
     # Factory method (companion object)
     @classmethod
-    def create_active_account(cls, email: str, raw_password: str, tenant_key: str, role: AccountRole):
+    def create_active_account(cls, email: str, tenant_key: str, role: AccountRole,  raw_password: str=Field(..., min_length=6)):
         return cls(
             email=email,
             password=pwd_context.hash(raw_password),
@@ -34,7 +35,7 @@ class Account(Base):
         )
 
     # Password change method
-    def change_password(self, new_password: str):
+    def change_password(self, new_password: str=Field(..., min_length=6)):
         self.password = pwd_context.hash(new_password)
 
     # Password check

@@ -25,7 +25,7 @@ class AccountCommandService(AccountCommandUseCase):
 
     def sign_up(self, email: str, password: str, tenant_key: str,
                 role: AccountRole) -> AccountSignupSuccessResponse:
-        account: Account = Account.create_active_account(email, password, tenant_key, role)
+        account: Account = Account.create_active_account(email=email, raw_password=password, tenant_key=tenant_key, role=role)
         self.account_repository.save(account)
         return AccountSignupSuccessResponse(
             id=account.id,
