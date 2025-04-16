@@ -29,7 +29,7 @@ class Container(containers.DeclarativeContainer):
 
     settings: Settings = providers.Singleton(Settings)
 
-    db: providers.Resource[Session] = providers.Resource(get_db)
+    db: providers.Factory[Session] = providers.Factory(get_db)
 
     jwt_token_provider: JwtTokenProvider = providers.Singleton(
         JwtTokenProviderImpl,
@@ -41,10 +41,9 @@ class Container(containers.DeclarativeContainer):
         email_service_port=EmailServicePortStubImpl()
     )
 
-    account_repository: AccountRepository = providers.Singleton(AccountRepositoryImpl, db=db)
-
-    project_repository: ProjectRepository = providers.Singleton(ProjectRepositoryImpl, db=db)
-    project_member_repository: ProjectMemberRepository = providers.Singleton(ProjectMemberRepositoryImpl, db=db)
+    account_repository: AccountRepository = providers.Factory(AccountRepositoryImpl, db=db)
+    project_repository: ProjectRepository = providers.Factory(ProjectRepositoryImpl, db=db)
+    project_member_repository: ProjectMemberRepository = providers.Factory(ProjectMemberRepositoryImpl, db=db)
 
     account_command_usecase: AccountCommandUseCase = providers.Singleton(
         AccountCommandService,

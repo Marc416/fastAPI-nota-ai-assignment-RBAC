@@ -2,6 +2,7 @@ import logging
 import traceback
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import JSONResponse
@@ -34,6 +35,22 @@ def register_exception_handlers(app: FastAPI):
                 code=e.code,
                 message=e.message,
                 data=e.data
+            ).__dict__
+        )
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(request: Request, e: RequestValidationError):
+        logger.error(f"RequestValidationError occurred. message={str(e)}")
+        logger.error("".join(traceback.format_exception(type(e), e, e.__traceback__)))
+
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content=HttpApiResponse.from_exception_message(
+                code=CodeEnum.FRS_003,
+                message=e.args[0][0]["msg"],
+                data={
+                    "input":e.args[0][0]["input"]
+                }
             ).__dict__
         )
 

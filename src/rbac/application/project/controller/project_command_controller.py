@@ -1,9 +1,9 @@
 from dependency_injector.wiring import inject, Provide
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from fastapi_utils.cbv import cbv
 
-from rbac.application.account.dto.request.project_remove_member_request import ProjectRemoveMemberRequest
-from rbac.application.account.dto.request.project_update_request import ProjectUpdateRequest
+from rbac.application.project.dto.request.project_remove_member_request import ProjectRemoveMemberRequest
+from rbac.application.project.dto.request.project_update_request import ProjectUpdateRequest
 from rbac.application.common.http_response.http_api_response import HttpApiResponse
 from rbac.application.common.user_detail import UserDetail
 from rbac.application.decorator.check_project_role import check_project_role
