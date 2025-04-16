@@ -48,6 +48,7 @@ class ProjectCommandService(ProjectCommandUseCase):
             if member_id not in member_map:
                 # 예외처리로 하지 않음.
                 logger.warning("Member ID %s not found in project members", member_id)
+                continue
             member_map[member_id].remove_from_project()
             members.append(member_map[member_id])
         self.project_member_repository.update_all(members)
