@@ -1,5 +1,5 @@
 from src.rbac.application.common.jwt_token_provider_impl import JwtTokenProviderImpl
-from src.rbac.config.settings import Settings
+from rbac.application.config.settings import Settings
 
 
 class TestJwtTokenProvider:

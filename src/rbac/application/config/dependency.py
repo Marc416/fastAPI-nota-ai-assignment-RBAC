@@ -1,7 +1,7 @@
 from fastapi import Depends
 
 from rbac.application.common.jwt_token_provider_impl import JwtTokenProviderImpl
-from rbac.config.settings import Settings
+from rbac.application.config.settings import Settings
 
 
 def get_settings():

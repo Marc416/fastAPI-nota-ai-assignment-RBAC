@@ -1,5 +1,5 @@
 from dependency_injector.wiring import inject, Provide
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi_utils.cbv import cbv
 
 from rbac.application.account.dto.request.project_remove_member_request import ProjectRemoveMemberRequest
@@ -9,8 +9,8 @@ from rbac.application.common.user_detail import UserDetail
 from rbac.application.decorator.check_project_role import check_project_role
 from rbac.application.project.dto.request.project_add_member_request import ProjectAddMemberRequest
 from rbac.application.project.dto.request.project_create_request import ProjectCreateRequest
-from rbac.config.auth.authentication import get_current_user
-from rbac.config.container import Container
+from rbac.application.config.auth.authentication import get_current_user
+from rbac.application.config.container import Container
 from rbac.domain.project.dto.response.project_response import ProjectResponse
 from rbac.domain.project.entity.project_role import ProjectRole
 from rbac.domain.project.service.project_command_usecase import ProjectCommandUseCase
@@ -51,7 +51,6 @@ class ProjectCommandController:
             self,
             project_id: int,
             request: ProjectUpdateRequest,
-            user_detail: UserDetail = Depends(get_current_user),
     ):
         """
         Update an existing project
@@ -67,7 +66,6 @@ class ProjectCommandController:
     def delete_project(
             self,
             project_id: int,
-            user_detail: UserDetail = Depends(get_current_user),
     ):
         """
         Delete an existing project
@@ -101,7 +99,6 @@ class ProjectCommandController:
             self,
             project_id: int,
             request: ProjectRemoveMemberRequest,
-            user_detail: UserDetail = Depends(get_current_user),
     ):
         """
         Remove members from an existing project

@@ -4,6 +4,8 @@ from dependency_injector.wiring import inject, Provide
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
+from rbac.application.common.http_response.code_enum import CodeEnum
+from rbac.application.exception.application_exception import ApplicationException
 from rbac.domain.project.entity.project import Project
 from rbac.domain.project.entity.project_status import ProjectStatus
 from rbac.domain.project.repository.project_repository import ProjectRepository
@@ -29,8 +31,10 @@ class ProjectRepositoryImpl(ProjectRepository):
             )
         ).first()
         if project is None:
-            # TODO : 프로젝트 없을 때 예외 처리
-            raise ValueError("Project not found")
+            raise ApplicationException(
+                code=CodeEnum.FRS_001,
+                message="Project not found",
+            )
         return project
 
     def find_by_id(self, id: int) -> Optional[Project]:

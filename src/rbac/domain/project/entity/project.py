@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import Integer, Column, String, DateTime, Enum as SAEnum
 
-from rbac.config.db.base import Base
+from rbac.application.config.db.base import Base
 from rbac.domain.project.entity.project_status import ProjectStatus
 
 
