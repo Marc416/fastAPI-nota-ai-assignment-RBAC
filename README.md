@@ -45,7 +45,44 @@ Infrastructure (DB, 외부 API): 저장 또는 외부 통신
 
 애플리케이션간 구분을 지어보고, 어떤 유스케이스를 제공하는지 알 수 있도록 해보자  
 -> AccountService 를 SendMoneySerivce 로 표현을 구체화하기  
--> package-private 접근 제한자로 외부 패키지에서 접근 못하게 하기(해당 접근 제한자는 java의 default 제한자로 아무것도 쓰지 않으면 기본으로 제한함)   
+-> package-private 접근 제한자로 외부 패키지에서 접근 못하게 하기(해당 접근 제한자는 java의 default 제한자로 아무것도 쓰지 않으면 기본으로 제한함) 
+```
+com.example.myapp
+├── MyInternalClass.java
+├── PublicService.java
+```
+```java
+package com.example.myapp;
+
+// 접근제어자가 없음 → package-private
+class MyInternalClass {
+    void doSomething() {
+        System.out.println("패키지 내부에서만 접근 가능");
+    }
+}
+```
+```java
+package com.example.myapp;
+
+public class PublicService {
+    public void useInternal() {
+        MyInternalClass internal = new MyInternalClass(); // O 가능
+        internal.doSomething(); // O 가능
+    }
+}
+```
+```java
+// 다른 패키지
+package com.example.other;
+
+import com.example.myapp.MyInternalClass; // ❌ 컴파일 에러
+
+public class HackAttempt {
+    public void fail() {
+        MyInternalClass internal = new MyInternalClass(); // ❌ 사용 불가
+    }
+}
+```
 <img width="556" alt="기능으로 구성하기" src="https://github.com/user-attachments/assets/85e6c627-e806-4ef8-9311-ae976cf89f24" />  
 <img width="578" alt="Pasted Graphic 18" src="https://github.com/user-attachments/assets/ae87d799-5b02-43ed-90af-75f12d8473be" />
 
